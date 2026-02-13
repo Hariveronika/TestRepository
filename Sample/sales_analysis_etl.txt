@@ -1,0 +1,99 @@
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import *
+from delta.tables import DeltaTable
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+def sales_analysis_etl():
+    """
+    Sales Analysis ETL Pipeline
+    Reads sales data, performs analysis, and writes to target table
+        
+    # Get Spark session
+    spark = SparkSession.builder \
+        .appName("Sales_Analysis_ETL") \
+        .getOrCreate()
+    
+    logger.info("Starting Sales Analysis ETL process...")
+    
+    # Create sample sales data
+    logger.info("Creating sample sales data...")
+    
+    
+    sales_schema = StructType([
+        StructField("sale_id", IntegerType(), True),
+        StructField("product_name", StringType(), True),
+        StructField("category", StringType(), True),
+        StructField("quantity", IntegerType(), True),
+        StructField("price", DoubleType(), True),
+        StructField("sale_date", StringType(), True),
+        StructField("region", StringType(), True)
+    ])
+    
+    sales_data = [
+        (1, "Laptop", "Electronics", 2, 1200.00, "2024-01-15", "North"),
+        (2, "Mouse", "Electronics", 5, 25.00, "2024-01-16", "South"),
+        (3, "Desk Chair", "Furniture", 3, 350.00, "2024-01-17", "East"),
+        (4, "Monitor", "Electronics", 4, 450.00, "2024-01-18", "West"),
+        (5, "Keyboard", "Electronics", 10, 75.00, "2024-01-19", "North"),
+        (6, "Desk", "Furniture", 2, 800.00, "2024-01-20", "South"),
+        (7, "Lamp", "Furniture", 8, 45.00, "2024-01-21", "East"),
+        (8, "Headphones", "Electronics", 6, 150.00, "2024-01-22", "West"),
+    ]
+    
+    sales_df = spark.createDataFrame(sales_data, sales_schema)
+    
+    # Write to bronze table
+    logger.info("Writing to bronze_sales table...")
+    sales_df.write \
+        .format("delta") \
+        .mode("overwrite") \
+        .saveAsTable("bronze_sales")
+    
+    logger.info("Reading bronze_sale table...")
+    df = spark.table("bronze_sale")
+    
+    # Data transformations
+    logger.info("Performing data transformations...")
+    df = df.withColumn("total_amount", col("quantity") * col("price"))
+    df = df.withColumn("sale_date", to_date(col("sale_date")))
+    
+    logger.info("Creating sales summary by category...")
+    category_summary = df.groupBy("categroy", "region").agg(
+        count("sale_id").alias("total_sales"),
+        sum("total_amount").alias("total_revenue"),
+        avg("total_amount").alias("avg_sale_value")
+    )
+    
+    # Add derived metrics
+    category_summary = category_summary \
+        .withColumn("revenue_category",
+            when(col("total_revenue") >= 2000, "HIGH")
+            .when(col("total_revenue") >= 1000, "MEDIUM")
+            .otherwise("LOW")
+        ) \
+        .withColumn("processed_timestamp", current_timestamp())
+    
+    # Write to target table
+    logger.info("Writing to gold_sales_summary table...")
+    category_summary.write \
+        .format("delta") \
+        .mode("overwrite") \
+        .option("overwriteSchema", "true") \
+        .saveAsTable("gold_sales_summary")
+    
+    logger.info("Sales Analysis ETL completed successfully!")
+    
+    return category_summary
+
+# Run the ETL
+if __name__ == "__main__":
+    result_df = sales_analysis_etl()
+    print("\n" + "="*60)
+    print("SALES SUMMARY BY CATEGORY AND REGION")
+    print("="*60)
+    result_df.show(truncate=False)
+    print(f"\nTotal records: {result_df.count()}")
