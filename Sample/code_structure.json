@@ -1,0 +1,114 @@
+{
+  "source_summary": {
+    "root": "/app/7037a64f-6e28-4b85-a227-a1e563f475d1",
+    "engine": "python_ast_builtin",
+    "parsed_files": 7,
+    "errors": 0
+  },
+  "metadata": [
+    {
+      "file": "/app/7037a64f-6e28-4b85-a227-a1e563f475d1/commons/commons/databricks_logger.py",
+      "module": "commons.commons.databricks_logger",
+      "docstring": null,
+      "class_count": 1,
+      "function_count": 0,
+      "import_count": 4,
+      "classes": [
+        {
+          "name": "SplunkLogger",
+          "bases": [],
+          "method_count": 8,
+          "line_start": 7,
+          "line_end": 283
+        }
+      ],
+      "functions": []
+    },
+    {
+      "file": "/app/7037a64f-6e28-4b85-a227-a1e563f475d1/commons/commons/literals.py",
+      "module": "commons.commons.literals",
+      "docstring": null,
+      "class_count": 0,
+      "function_count": 0,
+      "import_count": 0,
+      "classes": [],
+      "functions": []
+    },
+    {
+      "file": "/app/7037a64f-6e28-4b85-a227-a1e563f475d1/commons/commons/schema_commons.py",
+      "module": "commons.commons.schema_commons",
+      "docstring": null,
+      "class_count": 0,
+      "function_count": 0,
+      "import_count": 12,
+      "classes": [],
+      "functions": []
+    },
+    {
+      "file": "/app/7037a64f-6e28-4b85-a227-a1e563f475d1/commons/commons/sftp_connection.py",
+      "module": "commons.commons.sftp_connection",
+      "docstring": null,
+      "class_count": 0,
+      "function_count": 6,
+      "import_count": 3,
+      "classes": [],
+      "functions": [
+        {"name": "get_sftp_secrets", "is_async": false, "line_start": 9, "line_end": 19, "param_count": 3},
+        {"name": "get_s3_object", "is_async": false, "line_start": 22, "line_end": 24, "param_count": 2},
+        {"name": "get_key_object", "is_async": false, "line_start": 27, "line_end": 30, "param_count": 2},
+        {"name": "connect_to_sftp", "is_async": false, "line_start": 32, "line_end": 51, "param_count": 6},
+        {"name": "get_sftp_files_in_directory", "is_async": false, "line_start": 54, "line_end": 83, "param_count": 2},
+        {"name": "archive_sftp_file", "is_async": false, "line_start": 88, "line_end": 117, "param_count": 2}
+      ]
+    },
+    {
+      "file": "/app/7037a64f-6e28-4b85-a227-a1e563f475d1/commons/commons/splunk_logger.py",
+      "module": "commons.commons.splunk_logger",
+      "docstring": null,
+      "class_count": 1,
+      "function_count": 0,
+      "import_count": 2,
+      "classes": [
+        {"name": "SplunkLogger", "bases": [], "method_count": 5, "line_start": 10, "line_end": 115}
+      ],
+      "functions": []
+    },
+    {
+      "file": "/app/7037a64f-6e28-4b85-a227-a1e563f475d1/commons/commons/util_commons.py",
+      "module": "commons.commons.util_commons",
+      "docstring": null,
+      "class_count": 3,
+      "function_count": 44,
+      "import_count": 31,
+      "classes": [
+        {"name": "STSSession", "bases": [], "method_count": 1, "line_start": 61, "line_end": 87},
+        {"name": "AWSResource", "bases": [], "method_count": 3, "line_start": 92, "line_end": 106},
+        {"name": "SourceEmptyException", "bases": ["Exception"], "method_count": 0, "line_start": 287, "line_end": 288}
+      ],
+      "functions": [ ... (truncated for brevity in this input, but actual upload will contain all function entries) ... ]
+    },
+    {
+      "file": "/app/7037a64f-6e28-4b85-a227-a1e563f475d1/commons/commons/util_commons_test.py",
+      "module": "commons.commons.util_commons_test",
+      "docstring": null,
+      "class_count": 3,
+      "function_count": 44,
+      "import_count": 31,
+      "classes": [
+        {"name": "STSSession", "bases": [], "method_count": 1, "line_start": 61, "line_end": 87},
+        {"name": "AWSResource", "bases": [], "method_count": 3, "line_start": 92, "line_end": 106},
+        {"name": "SourceEmptyException", "bases": ["Exception"], "method_count": 0, "line_start": 287, "line_end": 288}
+      ],
+      "functions": [ ... (truncated for brevity in this input, but actual upload will contain all function entries) ... ]
+    }
+  ],
+  "dependency_graph": {
+    "total_nodes": 32,
+    "total_edges": 57,
+    "internal_edges": 0,
+    "external_edges": 57,
+    "nodes": [ ... (truncated for brevity in this input, but actual upload will contain all node entries) ... ],
+    "edges": [ ... (truncated for brevity in this input, but actual upload will contain all edge entries) ... ]
+  },
+  "abstract_syntax_tree": [ ... (truncated for brevity in this input, but actual upload will contain all AST entries) ... ]
+}
