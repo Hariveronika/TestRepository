@@ -2,38 +2,30 @@
 
 Retailer Mix
 
-Retailer mix is the ratio of every non consented billing in each billing cycle that is allocated to every retailer in the country. This ratio is calculated based 
-on the number of enrolees for every country – retailer – page plan mix. When we add up all the ratios for all combinations, the retailer mix must add up to 
-1. For each consented billings however, the retailer mix will always be 1.
+Retailer mix is the ratio of every non consented billing in each billing cycle that is allocated to every retailer in the country. This ratio is calculated based on the number of enrolees for every country – retailer – page plan mix. When we add up all the ratios for all combinations, the retailer mix must add up to 1. For each consented billings however, the retailer mix will always be 1.
 
-Below is a snapshot table showing the relevant data for each retailer which includes details such as compensation retailer (which is reflecting as “not 
-attributed” which essentially means, “non consented”), allocated retailer, the original plan price in cents, plan price after VAT deduction, retailer mix, 
-revshare rate, and the final calculated amount.
+Below is a snapshot table showing the relevant data for each retailer which includes details such as compensation retailer (which is reflecting as “not attributed” which essentially means, “non consented”), allocated retailer, the original plan price in cents, plan price after VAT deduction, retailer mix, revshare rate, and the final calculated amount.
+
+| Compensation Retailer | Allocated Retailer | Plan Price (cents) | Plan Price after VAT deduction | Retailer Mix | Revshare Rate | Final Calculated Amount |
+|----------------------|-------------------|--------------------|-------------------------------|--------------|---------------|------------------------|
+| not attributed       | ...               | ...                | ...                           | ...          | ...           | ...                    |
 
 The retailer mix is used to calculate the revshare or final amount using below steps for every row in the above snapshot.
 
-Step 1 - The retailer mix will be rounded off to two decimal places, resulting in a new column named  (refer snapshot retailer_mix_round_off
-above).
+Step 1 - The retailer mix will be rounded off to two decimal places, resulting in a new column named (refer snapshot retailer_mix_round_off above).
 Step 2 - The pre plan mix amount is calculated as /100*100planprice(post VAT_deduction)*revshare_rate
 
-Please note that the denominator is calculated by multiplying the converted plan price in cents to dollar and revshare rate to percent. The above pre_plan
- gets rounded off to two decimal places._mix_amount
+Please note that the denominator is calculated by multiplying the converted plan price in cents to dollar and revshare rate to percent. The above pre_plan_mix_amount gets rounded off to two decimal places.
 
-Step 3 - The  is calculated as =  ×  which is again rounded to two decimal places.  final_amount  retailer_mix_round_off pre_plan_mix_amount
-This becomes the final revshare that is paid out to every allocated retailer for each row in the above snapshot.
-Step 4 - All these rows of billing ids will finally be aggregated (summation) from a  and will be program type, country, retailer, page plan level
-loaded into the summary tables. For determining the , the  column gets aggregated and for total paying subscribers retailer_mix_round_off
-determining the , the  column gets aggregated. This aggregated data is loaded into the summary tables. Total revshare final_amount
-Step 5 - The data from the summary tables finally gets loaded into the QA dashboard and into the RC Portal. 
+Step 3 - The final_amount is calculated as = retailer_mix_round_off × pre_plan_mix_amount which is again rounded to two decimal places. This becomes the final revshare that is paid out to every allocated retailer for each row in the above snapshot.
+Step 4 - All these rows of billing ids will finally be aggregated (summation) from a program type, country, retailer, page plan level and will be loaded into the summary tables. For determining the retailer_mix_round_off, the retailer_mix_round_off column gets aggregated and for determining the Total revshare, the final_amount column gets aggregated. This aggregated data is loaded into the summary tables.
+Step 5 - The data from the summary tables finally gets loaded into the QA dashboard and into the RC Portal.
 
-Data gets loaded into the QA dashboard using Power BI data refresh. 
-Data gets loaded into the RC Portal through UI refresh performed by the UI team. 
+Data gets loaded into the QA dashboard using Power BI data refresh.
+Data gets loaded into the RC Portal through UI refresh performed by the UI team.
 
-Please find the visualized decimal round off documentation ppt in below ticket where it explains why we introduced round off columns and how it fixed the 
-issue, 
+Please find the visualized decimal round off documentation ppt in below ticket where it explains why we introduced round off columns and how it fixed the issue,
 
- -  IIPA-2690 BA: New Initiative: Creation of detailed documentation for decimal roundoff CLOSED
+- IIPA-2690 BA: New Initiative: Creation of detailed documentation for decimal roundoff CLOSED
 
 https://hp-jira.external.hp.com/browse/IIPA-2690
-
-	Retailer mix round off logic
