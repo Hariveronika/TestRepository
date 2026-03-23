@@ -61,9 +61,9 @@ Key Stakeholders and roles and responsibilities are as below
 The following stakeholders and R&R are part of this reporting process:
 
 - The overall summary table is maintained by instant ink print analytics.
-- Other tables are maintained by IIDE team - Vinod P V (vijayan@hp.com)
+- Other tables are maintained by IIDE team - Vinod P V(vijayan@hp.com)
 - Any logic related issues need to be looked into by IIDE team.
 - The reports are consumed by the below contacts:
-  - mariona.brossa.dachs@hp.com
-  - pol.falgueras@hp.com
+  - brossa.dachs@hp.com
+  - falgueras@hp.com
   - alier@hp.com
