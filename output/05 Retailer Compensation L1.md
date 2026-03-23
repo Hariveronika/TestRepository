@@ -25,16 +25,16 @@ Step 6 Payment Processing Sales Ops
 Timelines for L1 approval activities
 
 Here is the detailed timeline for the activities owned by PA
-L1 Approval and database refresh Schedule is shared with stakeholders by the 7 calendar day
+L1 Approval and database refresh Schedule is shared with stakeholders by the 7 calendar dayth
 
-Standard refresh snapshot is created on the 7 Calendar Day of the month
+Standard refresh snapshot is created on of the monththe 7 Calendar Dayth
 
-Standard Refresh Pipeline runs on the 8 Calendar Day of the month (3 am IST)
+Standard Refresh Pipeline runs on the of the month (3 am IST)8 Calendar Dayth
 
 The scheduled refresh can be postponed under circumstances such as urgent rule modifications, issues in snapshot data etc. In case of delays the stakeholders are informed of the updated schedule
-Staples Report need to be approved within the 10 working day of the month
+Staples Report need to be approved within the of the month10 working dayth
 
-Priority Partner Reports need to be approved within the 12 working day of the month
+Priority Partner Reports need to be approved within the of the month12 working dayth
 
 Below are some additional details related to the L1 approval process to consider.
 
@@ -46,7 +46,6 @@ Payment is processed on every Friday in the PST hours
 Below is a list of all sequential steps analysts need to check to certify L1 approval as complete.
 
 Partner data generation
-
 Analysts need to check if all the partner reports have been generated and to identify the reason for any issues. Below are the sub-steps involved in this check.
 
 Ensure that data for 100% of active partners is generated. Cross-verify this information using the WW sheet and the UI portal.
@@ -64,7 +63,6 @@ As a pre check before standard refresh, we typically review the data at the coun
 Also, we need to ensure there are no significant changes in the data flow for the upcoming reporting month. If any major changes are detected, we will address them before the standard refresh date.
 
 Data mismatch checks
-
 Analysts to check for any data mismatch between the summaries and the backend. The process to do so is as below.
 
 Go to UI portal: Retailer
@@ -75,22 +73,21 @@ By comparing the data from the summary table with the UI portal, we can identify
 Ensure 100% match of partner report on UI across the summaries. (Page plan summary/ store summary, serial number summary).
 Begin by reviewing the overall summary for Instant Ink for the latest month. Check the following details:
 
-- Total bounty
-- Percentage change in bounty
-- Total revenue share
-- Percentage change in revenue share
+Total bounty
+Percentage change in bounty
+Total revenue share
+Percentage change in revenue share
 
 Cross-check this data with the Month Summary Report, Revenue Share Summary Report, and Bounty Summary Report.
 
 Repeat the steps for toner as well by reviewing the overall summary for Instant Ink for the latest month. Check the following details:
-- Total bounty
-- Percentage change in bounty
-- Total revenue share
-- Percentage change in revenue share
+Total bounty
+Percentage change in bounty
+Total revenue share
+Percentage change in revenue share
 Cross-check this data with the Month Summary Report, Revenue Share Summary Report, and Bounty Summary Report.
 
 Data Lineage tracing
-
 Analysts to validate the data flow across different tables in the backend making sure there are no potential data loss.
 
 Check total billings trend over last 4 months.
@@ -104,7 +101,6 @@ We then move to the "ineligible billings trend" tab. In this section, we will mo
 Navigate to "eligible billing trends". In this tab, the line graph allows us to easily track trends in paying subscribers and revenue share. By analysing the fluctuations and patterns, we can gain valuable insights into these metrics over time.
 
 Data Validation
-
 This refers to the validation of the final summary data.
 
 Navigate to Raw Data in RC QA dashboard.
@@ -134,7 +130,6 @@ Check trend of cross-country subscribers
 Once all the checks are complete, the report is marked as L1 approved with appropriate comments. Below is a snapshot of the final approved report.
 
 Rules Check
-
 This is done through automated scripts that is run before the scheduled Audit Refresh every reporting month. The script keeps getting updated as and when new checks are identified and added through code changes.
 
 This ends the L1 approval process. The overall approval of reports gets tracked every month through Jira tickets that are raised and tracked as part of every sprint. Each of the tickets are mapped to various analysts who review and update the ticket in case of any deviations.
