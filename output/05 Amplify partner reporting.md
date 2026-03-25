@@ -16,8 +16,6 @@ The key tables used as part of Amplify reporting are as below.
 
 Detailed steps to generate and validate the report are present at the below location.
 
-Amplify Data Feed Process Document - CSS Business Analytics - HP R&D Wiki
-
 Output
 
 The final output of the SQL code includes aggregated subscriber data for reporting months, countries, retailers, and partner locations. This aggregated data is referred to as Amplify data.
@@ -31,7 +29,7 @@ Success Scenario
 When Amplify reports are successfully generated, an email notification is sent as follows:
 
 Subject: Amplify Data for Reporting Month: XXXXXXXX
-    Sender: pa_instantink@hp8.us
+Sender: pa_instantink@hp8.us
 
 Message:
 Hi Team,
@@ -47,7 +45,7 @@ Failure Scenario
 In case of failures, an email notification is sent as follows, and the respective business stakeholders can reach out to the IIPA team:
 
 Subject: Amplify Data for Reporting Month: XXXXXXXX
-    Sender: pa_instantink@hp8.us
+Sender: pa_instantink@hp8.us
 
 Message:
 Hi Team,
@@ -61,16 +59,9 @@ Key Stakeholders and roles and responsibilities are as below
 The following stakeholders and R&R are part of this reporting process:
 
 - The overall summary table is maintained by instant ink print analytics.
-- Other tables are maintained by IIDE team - Vinod P V (vijayan@hp.com)
+- Other tables are maintained by IIDE team - Vinod P V(vijayan@hp.com)
 - Any logic related issues need to be looked into by IIDE team.
 - The reports are consumed by the below contacts:
   - brossa.dachs@hp.com
   - falgueras@hp.com
   - alier@hp.com
-
-https://rndwiki.inc.hpicorp.net/confluence/spaces/CSSBI/pages/1398987383/Amplify+Data+Feed+Process+Document
-mailto:pa_instantink@hp8.us
-mailto:vijayan@hp.com
-mailto:mariona.brossa.dachs@hp.com
-mailto:pol.falgueras@hp.com
-http://hp.com
