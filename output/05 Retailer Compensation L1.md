@@ -46,6 +46,7 @@ Payment is processed on every Friday in the PST hours
 Below is a list of all sequential steps analysts need to check to certify L1 approval as complete.
 
 Partner data generation
+
 Analysts need to check if all the partner reports have been generated and to identify the reason for any issues. Below are the sub-steps involved in this check.
 
 Ensure that data for 100% of active partners is generated. Cross-verify this information using the WW sheet and the UI portal.
@@ -63,6 +64,7 @@ As a pre check before standard refresh, we typically review the data at the coun
 Also, we need to ensure there are no significant changes in the data flow for the upcoming reporting month. If any major changes are detected, we will address them before the standard refresh date.
 
 Data mismatch checks
+
 Analysts to check for any data mismatch between the summaries and the backend. The process to do so is as below.
 
 Go to UI portal: Retailer
@@ -87,7 +89,46 @@ Total revenue share
 Percentage change in revenue share
 Cross-check this data with the Month Summary Report, Revenue Share Summary Report, and Bounty Summary Report.
 
+AUD Currency _Symbol:$
+
+Month-Over-Month Summary: Instant Toner
+
+| Month | % Change | Total Bounty | % Change | Total Compensation |
+|-------|----------|--------------|----------|-------------------|
+| Nov 24 | 2.95% | 292.04 | -7.88% | 294.99 |
+| Oct 24 | 0.00% | 317.02 | 2.21% | 317.02 |
+| Sep 24 | 0.00% | 310.18 | -4.49% | 310.18 |
+
+MONTHLY SUMMARY REPORT:
+
+| Enrollment (Bounty) | Monthly Revenue Share | Total Revenues |
+|---------------------|----------------------|---------------|
+| Plan Type | Enrollees | Promotional Tool | Non-Promotional Tool | Enrollees | Promotional Tool | Non-Promotional Tool | Bounty and Rev Share |
+| 50 | 100 | - | - | 0 | 80.49 | 102.16 | 102.16 |
+| 200 | 0 | 1 | 295 | 0 | 38.99 | 91.98 | 94.93 |
+| 400 | - | - | 0.0 | 0 | 1.32 | 3.98 | 3.98 |
+| 800 | - | - | 0.0 | 0 | 32 | 20.36 | 20.36 |
+| 1500 | 0.0 | 0 | 1.66 | 13.58 | 13.58 |
+| Total | 0 | 1 | 2.98 | 0 | 205.21 | 292.04 | 294.99 |
+
+OVERALL SUMMARY | BOUNTY SUMMARY | REVSHARE SUMMARY
+
+| Instant Toner | Amount |
+|---------------|--------|
+| Total LI | |
+| Total Enrollees (in AUD) | |
+| Unmapped Store | Promotional Tool | 0 | 0 |
+| Non-Promotional Tool | 1 | 2.95 |
+| Mapped Store | Promotional Tool | 0 | 0 |
+| Non-Promotional Tool | 0 | 0 |
+| Total | 1 | 2.95 |
+
+Store Id
+
+Kitless 1 2.95
+
 Data Lineage tracing
+
 Analysts to validate the data flow across different tables in the backend making sure there are no potential data loss.
 
 Check total billings trend over last 4 months.
@@ -101,6 +142,7 @@ We then move to the "ineligible billings trend" tab. In this section, we will mo
 Navigate to "eligible billing trends". In this tab, the line graph allows us to easily track trends in paying subscribers and revenue share. By analysing the fluctuations and patterns, we can gain valuable insights into these metrics over time.
 
 Data Validation
+
 This refers to the validation of the final summary data.
 
 Navigate to Raw Data in RC QA dashboard.
@@ -108,7 +150,7 @@ MOM change of 5% for the paying subscribers and revshare amount is within the ac
 
 As observed, the acceptable range for change is 5%, but we are seeing a change of -6.17% change in paying subscribers and -6.15% change in Revshare w/o catchup. This necessitates further analysis to identify the reasons behind this deviation. It could be due to seasonality or other factors that need to be understood through detailed analysis. The same analysis should be conducted for other program types as well.
 
-For detailed understanding of  Revshare, navigate to the Rev Share tab and examine metrics such as Revshare amount by plan mix and Revshare per subscriber. By analyzing these numbers, we can identify any changes in the Revshare amount.
+For detailed understanding of Revshare, navigate to the Rev Share tab and examine metrics such as Revshare amount by plan mix and Revshare per subscriber. By analyzing these numbers, we can identify any changes in the Revshare amount.
 For example, we can observe that the Revshare per subscriber decreased from 1.71 in October to 1.70 in November. Additionally, when examining the Revshare amount by plan mix, it is evident that the numbers have declined in November across all plan pages except for 25PP and 700PP. This indicates a need for further analysis to understand the reasons behind these changes.
 
 MOM change of +/- 10% for bounty enrollees/ amount is acceptable.
@@ -130,6 +172,7 @@ Check trend of cross-country subscribers
 Once all the checks are complete, the report is marked as L1 approved with appropriate comments. Below is a snapshot of the final approved report.
 
 Rules Check
+
 This is done through automated scripts that is run before the scheduled Audit Refresh every reporting month. The script keeps getting updated as and when new checks are identified and added through code changes.
 
 This ends the L1 approval process. The overall approval of reports gets tracked every month through Jira tickets that are raised and tracked as part of every sprint. Each of the tickets are mapped to various analysts who review and update the ticket in case of any deviations.
