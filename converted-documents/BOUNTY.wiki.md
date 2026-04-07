@@ -140,19 +140,19 @@ Global rules : Below mentioned are global rules which needs to be checked.
 
 6) Global_rules_exceptions_combined_is_created -
 
-1. Check eligibility exceptions for bounty from " " which needs to be removed i.e for retailer Dixons country GB and retailer conditional_exceptions.csv MSH country DE.
+1. Check eligibility exceptions for bounty from conditional_exceptions.csv which needs to be removed i.e for retailer Dixons country GB and retailer MSH country DE.
 
 2. Then convert the Data Frame fixed_exceptions_list into a list of dictionaries, where each dictionary represents a row of the Data Frame with column names as keys.
 
 3. If action is none then we get the eligibility exception null and for that retailer if it's not null then conditions are specified where retailer kit printer from source is matched with csv file retailer then we update exception name i.e .xmo2_exception , MSH_Exception
 
-4. Get exceptions from If there are any nulls in exception end date, fill them with the maximum date, i.e app_bm_instant_ink_ops.exceptions_list. tomorrow's date add eligibility_exception in cust_sub_base by joining on exception_value( row with column mapping),printer_retailer_source, exception_start_date<=enrolled on date<=exception_end_date and country id.
+4. Get exceptions from app_bm_instant_ink_ops.exceptions_list. If there are any nulls in exception end date, fill them with the maximum date, i.e tomorrow's date add eligibility_exception in cust_sub_base by joining on exception_value( row with column mapping),printer_retailer_source, exception_start_date<=enrolled on date<=exception_end_date and country id.
 
-- exception_field and exception_column should match
-- printer_retailer_source should match with the source from exceptions table
-- enrolled_on_date should be between exception_start_date and exception_end_date
-- country_id should match with the country from exceptions table
-- If all the above conditions are met, write value of exception_field in eligibility_exception
+   - exception_field and exception_column should match
+   - printer_retailer_source should match with the source from exceptions table
+   - enrolled_on_date should be between exception_start_date and exception_end_date
+   - country_id should match with the country from exceptions table
+   - If all the above conditions are met, write value of exception_field in eligibility_exception
 
 5. Create global_rules_exceptions_combined in cust_sub_base which is true if bountry_rules_criteria_combined is true and 'eligibility_exception' column is either an empty string ('') or null (isNull()). else false.
 
@@ -173,7 +173,7 @@ Tables -
 
 1. Data from source with global rules flag will be present in df0.
 
-2. Add retailer rules, tables from these retailers rules are fetched-retailer_compensation.mapping_rules_index,retailer_compensation. mapping_retailer_compensation,retailer_compensation.mapping_retailer_compensation_rule.
+2. Add retailer rules, tables from these retailers rules are fetched-retailer_compensation.mapping_rules_index,retailer_compensation.mapping_retailer_compensation,retailer_compensation.mapping_retailer_compensation_rule.
 
 3. From mapping_rules_index table we get retailer comp index, retailer rules index, rule start date ,rule end date for those only records where status = Approved.
 
@@ -245,9 +245,9 @@ This end check point 2, all these data come into df2.
 
 1. Now we create Compensation type and categorize data if its kit bounty, kitless bounty or Not Applicable. It is decided by the following conditions:
 
-- Kit bounty: When enrollment_type is kit and enrolled_on_date is between contract start date and contract end date.
-- Kitless bounty: When enrollment_type is kitless and enrolled_on_date is between contract start date and contract end date.
-- Not Applicable: If it doesn't fall under both of the cases above.
+   - Kit bounty: When enrollment_type is kit and enrolled_on_date is between contract start date and contract end date.
+   - Kitless bounty: When enrollment_type is kitless and enrolled_on_date is between contract start date and contract end date.
+   - Not Applicable: If it doesn't fall under both of the cases above.
 
 2. We create json rules criteria is created as pass.
 
@@ -259,9 +259,9 @@ This end check point 2, all these data come into df2.
 
 1. Here we decide the bounty eligibility if it is given, not given or eligible but no bounty:
 
-- Eligible but no bounty: When compensation type is Kit bounty and kit bounty is 0 or when compensation type is kitless bounty and kitless bounty is 0 and json rules criteria is pass and contract eligibility criteria is pass.
-- Bounty given: json rules criteria is pass and contract eligibility criteria is also pass.
-- No Bounty: When both the above conditions are not satisfied.
+   - Eligible but no bounty: When compensation type is Kit bounty and kit bounty is 0 or when compensation type is kitless bounty and kitless bounty is 0 and json rules criteria is pass and contract eligibility criteria is pass.
+   - Bounty given: json rules criteria is pass and contract eligibility criteria is also pass.
+   - No Bounty: When both the above conditions are not satisfied.
 
 18) Check point – 3
 
@@ -293,47 +293,47 @@ Filtering for only bounty_eligibility i.e Bounty given.
 
 3. To create store id these are the conditions:
 
-- If the value of the column 'enrollment_type' is 'Prepaid_Standalone', and the 'ori_card_store_id' is null while the 'ori_printer_store_id' is not null, then the value of the 'store_key' column is set as the value of the 'ori_printer_store_key' column.
-- Otherwise, if the value of the column 'enrollment_type' is not equal to 'Kitless', then the value of the 'store_key' column is set as the value of the 'ori_card_store_key' column.
-- If none of the above conditions match, the value of the 'store_key' column is set as the value of the 'ori_printer_store_key' column.
+   - If the value of the column 'enrollment_type' is 'Prepaid_Standalone', and the 'ori_card_store_id' is null while the 'ori_printer_store_id' is not null, then the value of the 'store_key' column is set as the value of the 'ori_printer_store_key' column.
+   - Otherwise, if the value of the column 'enrollment_type' is not equal to 'Kitless', then the value of the 'store_key' column is set as the value of the 'ori_card_store_key' column.
+   - If none of the above conditions match, the value of the 'store_key' column is set as the value of the 'ori_printer_store_key' column.
 
 4. Create bounty rate column which has 2 values kit bounty or kitless bounty. And it depends on compensation type column.
 
 5. We add mapped store logic for MSH. Mapped store will be true only for these conditions:
 
-- retailer_kit_printer should be equal to MSH.
-- country_id should be AT oe DE.
-- When country_id =AT and store_comments_text starts with A and store_comments_text is not null and store display name is not null.
-- When country_id =DE and store_comments_text starts with M OR S and store_comments_text is not null and store display name is not null.
+   - retailer_kit_printer should be equal to MSH.
+   - country_id should be AT oe DE.
+   - When country_id =AT and store_comments_text starts with A and store_comments_text is not null and store display name is not null.
+   - When country_id =DE and store_comments_text starts with M OR S and store_comments_text is not null and store display name is not null.
 
 23) Decimal Round Off Columns Created -
 
 1. We create retailer mix round off column by rounding off retailer mix into 2 decimal places. We create amount column based on these conditions:
 
-- When country id is US and enrollment type is kitless then kitless bounty.
-- When country id is US and enrollment type is not equal to kitless then kit bounty.
-- When country id is not equal to US and enrollment type is kitless then retailer mix round off * kitless bounty.
-- Otherwise, retailer mix round off * kit bounty.
+   - When country id is US and enrollment type is kitless then kitless bounty.
+   - When country id is US and enrollment type is not equal to kitless then kit bounty.
+   - When country id is not equal to US and enrollment type is kitless then retailer mix round off * kitless bounty.
+   - Otherwise, retailer mix round off * kit bounty.
 
 24) USD Conversion -
 
 1. We define dollar conversion table:
 
-  Table : App_BM_Instant_Ink_Ops.base_hist_curr_val_v2
+   Table : App_BM_Instant_Ink_Ops.base_hist_curr_val_v2
 
-  Logic : We join dollar conversion table to convert the local currency amount to USD.
+   Logic : We join dollar conversion table to convert the local currency amount to USD.
 
 25) Gross for US -
 
 1. We define the gross up table for bounty,
 
- Table : bi_fact.printer_consents_country_agg_iisb
+   Table : bi_fact.printer_consents_country_agg_iisb
 
- We take the latest gross up value by partioning according to country_id, program type,reporting_month,order by created_at.
+   We take the latest gross up value by partioning according to country_id, program type,reporting_month,order by created_at.
 
-Logic : We create gross up column from amount by dividing the amount with telimetry_option_and_blank_percent and muliply with 100.
+   Logic : We create gross up column from amount by dividing the amount with telimetry_option_and_blank_percent and muliply with 100.
 
- This is done because US comes under phase one logic. We gross up the amount with the percentage present in this table which is updated every month.
+   This is done because US comes under phase one logic. We gross up the amount with the percentage present in this table which is updated every month.
 
 2. 1st we convert all amount to USD then gross up only for US and convert the amount gross up column to USD.
 
