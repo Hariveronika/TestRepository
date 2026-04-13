@@ -1,4 +1,4 @@
-Source tag : https://rndwiki.inc.hpicorp.net/confluence/spaces/CSSBI/pages/1800574729/Cascade+to+Alpaca+-+Push+api+Job+-+Work+in+Progress
+Source tag : https://rndwiki.inc.hpicorp.net/confluence/spaces/CSSBI/pages/1800574736/Cascade+to+Alpaca+-+API+Push
 
 Note : This extracted file is generated from SharePoint or Wiki content. If the source document contains images, charts, or graphical elements, they may not be fully converted into Markdown format. For complete clarity, please refer to the original source using the source tag provided above.
 
@@ -33,12 +33,14 @@ Every day, this job:
 
 This is Job 6 — the final step in the 6-job consent_sync pipeline:
 
+```
 Job 1: stage_consent_sync_job         → Create staging table from 24+ sources
 Job 2: upsert_based_on_stratus_id     → Merge by STRATUS_ID
 Job 3: upsert_based_on_customer_id    → Merge by CUSTOMER_ID
 Job 4: upsert_based_on_email          → Merge by email
 Job 5: b2c_wrapper_and_printer_flag   → Apply business rules & finalize
 Job 6: hp_ai_opt_outs_to_alpaca  ★    → Push changes to Alpaca API
+```
 
 ### Key Facts
 
@@ -58,6 +60,7 @@ Alpaca is HP's centralized Consent Management Platform. It stores and manages cu
 
 This job is the outbound sync leg of the consent pipeline:
 
+```
 ┌──────────────────┐     ┌──────────────────┐     ┌─────────────────┐     ┌──────────────────────────┐
 │   HP Systems     │     │  consent_sync    │     │   THIS JOB      │     │   Alpaca Platform        │
 │  - HPSmart       │────►│  Unity Catalog   │────►│  hp_ai_opt_outs │────►│  Consent Management      │
@@ -66,6 +69,7 @@ This job is the outbound sync leg of the consent pipeline:
 │  - Print AuthX   │     │                  │     │                 │     │  All HP Marketing Systems│
 │  - HPC Campaign  │     │                  │     │                 │     │  respect the consent     │
 └──────────────────┘     └──────────────────┘     └─────────────────┘     └──────────────────────────┘
+```
 
 The consent_sync table is assembled by 5 upstream jobs that consolidate consent data from 24+ sources. This job (Job 6 in the pipeline) reads the finalized consent_sync table and pushes today's changes to Alpaca.
 
@@ -95,6 +99,7 @@ Only consent changes from these HP organizations are sent to Alpaca:
 
 ### End-to-End Flow Diagram
 
+```
 ┌─────────────────────────────────────────────────────────────────────────────────────────┐
 │                            hp_ai_opt_outs_to_alpaca Job                                 │
 │                                                                                         │
@@ -141,6 +146,7 @@ Only consent changes from these HP organizations are sent to Alpaca:
 │                 │ (UC Table, Parquet)   │  │ (UC Table, Parquet)       │                 │
 │                 └──────────────────────┘  └──────────────────────────┘                  │
 └─────────────────────────────────────────────────────────────────────────────────────────┘
+```
 
 ### Step-by-Step Sequence
 
@@ -166,6 +172,7 @@ Only consent changes from these HP organizations are sent to Alpaca:
 
 ### Mermaid Diagram
 
+```
 flowchart TD
     CS[(consent_sync)] --> Date{Determine<br/>Processing Date}
     
@@ -216,6 +223,7 @@ flowchart TD
     
     SaveSuccess --> End([Job Complete])
     SaveFailure --> End
+```
 
 ## APIs Used
 
@@ -234,14 +242,17 @@ This is the primary API used by this job. Every consent change is sent as an ind
 
 #### Request Headers
 
+```
 POST {alpaca_write_consent_url}
 Authorization: Bearer {oauth_access_token}
 Content-Type: {Content-Type from secrets}
+```
 
 #### Request Body — Variant A (Without mdmPersonIds)
 
 Used for direct opt-outs where no HPID customer identifier exists:
 
+```json
 {
   "action": "opt-out",
   "purposeId": "advertising.email.marketing.b2c",
@@ -255,11 +266,13 @@ Used for direct opt-outs where no HPID customer identifier exists:
     "email": "customer@example.com"
   }
 }
+```
 
 #### Request Body — Variant B (With mdmPersonIds)
 
 Used for email-update records where HPID exists:
 
+```json
 {
   "action": "opt-out",
   "purposeId": "advertising.email.marketing.b2c",
@@ -274,9 +287,11 @@ Used for email-update records where HPID exists:
     "mdmPersonIds": ["HPIDcustomer123"]
   }
 }
+```
 
 #### Response — Success (HTTP 200)
 
+```json
 [
   {
     "transactionId": "abc-123-def",
@@ -286,9 +301,11 @@ Used for email-update records where HPID exists:
     }
   }
 ]
+```
 
 #### Response — Error (HTTP 4xx/5xx)
 
+```json
 {
   "errors": [
     {
@@ -297,6 +314,7 @@ Used for email-update records where HPID exists:
     }
   ]
 }
+```
 
 #### Field Reference
 
@@ -313,6 +331,7 @@ Used for email-update records where HPID exists:
 
 #### Code Location
 
+```python
 # Post function: hp_ai_opt_outs_to_alpaca_utils.py
 def post_request_to_alpaca_consent_api(json, alpaca_oauth_credentials):
     url = alpaca_oauth_credentials["alpaca_write_consent_url"]
@@ -322,6 +341,7 @@ def post_request_to_alpaca_consent_api(json, alpaca_oauth_credentials):
     }
     response = requests.post(url, data=body, headers=headers)
     return response
+```
 
 ### API 2: Alpaca Purpose Info API (GET)
 
@@ -337,11 +357,14 @@ Used by the separate alpaca_purpose_locale_version_mapping job to refresh the lo
 
 #### Request
 
+```
 GET {purpose_info_url}advertising.email.marketing.b2c
 Authorization: Bearer {oauth_access_token}
+```
 
 #### Response (HTTP 200)
 
+```json
 {
   "records": [
     {
@@ -358,6 +381,7 @@ Authorization: Bearer {oauth_access_token}
     }
   ]
 }
+```
 
 This response is parsed into the alpaca_purpose_locale_version_mapping Unity Catalog table:
 
@@ -369,6 +393,7 @@ This response is parsed into the alpaca_purpose_locale_version_mapping Unity Cat
 
 #### Code Location
 
+```python
 # alpaca_purpose_locale_version_mapping_utils.py
 def get_request_to_alpaca_purpose_api(alpaca_oauth_credentials, purpose_id):
     url = f"{alpaca_oauth_credentials['purpose_info_url']}{purpose_id}"
@@ -377,6 +402,7 @@ def get_request_to_alpaca_purpose_api(alpaca_oauth_credentials, purpose_id):
     }
     response = requests.get(url, headers=headers)
     return response
+```
 
 ## Authentication and Secrets
 
@@ -386,22 +412,27 @@ All Alpaca API calls use OAuth 2.0 Client Credentials Grant. This is a server-to
 
 #### Token Request
 
+```
 POST {oauth_token_url}
 Content-Type: application/x-www-form-urlencoded
 Authorization: Basic base64(client_id:secret)
 
 grant_type=client_credentials&scope={scope}
+```
 
 #### Token Response
 
+```json
 {
   "access_token": "eyJhbGciOiJSUzI1NiIs...",
   "token_type": "Bearer",
   "expires_in": 3600
 }
+```
 
 #### Code Implementation
 
+```python
 # util_commons.py (line 1409)
 def get_oauth_access_token(alpaca_oauth_credentials):
     body = {
@@ -418,6 +449,7 @@ def get_oauth_access_token(alpaca_oauth_credentials):
     )
     access_token = response.json()["access_token"]
     return access_token
+```
 
 ### AWS Secrets Manager
 
@@ -454,6 +486,7 @@ The secret contains two sets of OAuth credentials. Alpaca requires different cre
 
 #### Credential Swap in Code
 
+```python
 # Main notebook — after sending with-timestamp records, swap credentials:
 alpaca_oauth_credentials["client_id"] = alpaca_oauth_credentials["non_timestamp_client_id"]
 alpaca_oauth_credentials["secret"]    = alpaca_oauth_credentials["non_timestamp_secret"]
@@ -461,9 +494,11 @@ alpaca_oauth_credentials["scope"]     = alpaca_oauth_credentials["non_timestamp_
 
 # Then send without-timestamp records
 send_consents_to_alpaca(json_list_without_timestamp, alpaca_oauth_credentials)
+```
 
 #### Token Lifecycle
 
+```
 Job Start
   │
   ├── Get OAuth token (primary credentials)
@@ -481,6 +516,7 @@ Job Start
   └── Send WITHOUT-timestamp records (20 parallel workers)
         ├── If 401 → Refresh token → Retry once
         └── If 5xx → Sleep 5 min → Retry once
+```
 
 ## Record Types and Business Logic
 
@@ -580,12 +616,14 @@ Edge case: Both old and new emails must be opted out. The timestamps differ beca
 
 #### Union All Records
 
+```python
 latest_updates_df = (
     latest_opt_out_df
     .unionByName(email_update_records_df)
     .unionByName(simultaneous_email_newsletter_notify_update_df)
     .withColumn("purposeId", F.lit("advertising.email.marketing.b2c"))
 )
+```
 
 #### Verbiage Enrichment
 
@@ -610,8 +648,10 @@ Removes records where email is in the blocklist:
 
 #### Split by Timestamp
 
+```python
 with_timestamp    = df.filter(F.col('timestamp').isNotNull())
 without_timestamp = df.filter(F.col('timestamp').isNull())
+```
 
 Each group uses different OAuth credentials when calling the Alpaca API.
 
@@ -623,6 +663,7 @@ The function get_request_json_list(df) converts a DataFrame into a list of JSON 
 
 #### Records Without customer_id
 
+```python
 # dataSubject contains only email
 {
   "dataSubject": {"email": "customer@example.com"},
@@ -632,9 +673,11 @@ The function get_request_json_list(df) converts a DataFrame into a list of JSON 
   "timestamp": "2025-01-28T14:30:00Z",
   "verbiage": {"locale": "en-US", "version": "3"}
 }
+```
 
 #### Records With customer_id
 
+```python
 # dataSubject contains email + mdmPersonIds array
 {
   "dataSubject": {
@@ -647,6 +690,7 @@ The function get_request_json_list(df) converts a DataFrame into a list of JSON 
   "timestamp": "2025-01-28T14:30:00Z",
   "verbiage": {"locale": "en-US", "version": "3"}
 }
+```
 
 ### Successful Response Schema
 
@@ -654,6 +698,7 @@ Saved to: team_cascade_prod.engineering_room.alpaca_consent_api_successful_reque
 
 #### PySpark Schema Definition
 
+```python
 SUCCESSFUL_REQUESTS_SCHEMA = StructType([
     StructField("transactionId", StringType(), True),
     StructField("transactionDate", StringType(), True),
@@ -661,6 +706,7 @@ SUCCESSFUL_REQUESTS_SCHEMA = StructType([
         StructField("email", StringType(), True)
     ]), True)
 ])
+```
 
 #### Columns Written to Table
 
@@ -677,6 +723,7 @@ Saved to: team_cascade_prod.engineering_room.alpaca_consent_api_unsuccessful_req
 
 #### PySpark Schema Definition
 
+```python
 UNSUCCESSFUL_REQUESTS_SCHEMA = StructType([
     StructField("Response Status Code", StringType(), True),
     StructField("Response Error", StructType([
@@ -685,6 +732,7 @@ UNSUCCESSFUL_REQUESTS_SCHEMA = StructType([
     ]), True),
     StructField("Request opt_out_json", StringType(), True),
 ])
+```
 
 #### Columns Written to Table
 
